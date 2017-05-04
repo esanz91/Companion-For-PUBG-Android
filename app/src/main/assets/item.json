@@ -1,5 +1,4 @@
 {
-  "item_list":{
     "categories":[
       {
         "cat_name":"Weapon",
@@ -986,10 +985,5 @@
           }
         ]
       }
-
-
-
-
     ]
-  }
 }

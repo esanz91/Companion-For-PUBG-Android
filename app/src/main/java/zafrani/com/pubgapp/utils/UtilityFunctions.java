@@ -11,25 +11,28 @@ import com.google.gson.stream.JsonToken;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import zafrani.com.pubgapp.models.ItemContainer;
 import zafrani.com.pubgapp.models.ItemList;
 
 public class UtilityFunctions {
 
+    static final String TAG = UtilityFunctions.class.getSimpleName();
 
     public static ItemList generateItemList(Context context) {
-        final String TAG = "UtilityFunctions.class";
         try {
 
 
             Gson gson = new GsonBuilder().serializeNulls().create();
 
             File f = new File(context.getCacheDir() + "/item.json");
+            FileInputStream fileInputStream = new FileInputStream(f);
 
 
+            /*
             try {
                 BufferedReader br = new BufferedReader(new FileReader(f));
                 String line;
@@ -39,19 +42,16 @@ public class UtilityFunctions {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             JsonReader reader = new JsonReader(new FileReader(f));
 
-            handleObject(reader);
 
-            ItemContainer items = gson.fromJson(reader, ItemContainer.class);
+            handleObject(reader);*/
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            ItemContainer items = load(inputStreamReader, ItemContainer.class);
 
-            if (items.getCategories() != null) {
-                for (int i = 0; i < items.getCategories().size(); i++) {
-                    Log.e(TAG, items.getCategories().get(i).toString());
 
-                }
-
+            if (items != null) {
+                Log.e(TAG, items.toString());
             } else {
                 Log.e(TAG, "Item Container is empty.");
             }
@@ -64,8 +64,22 @@ public class UtilityFunctions {
         return null;
     }
 
-    private static void handleObject(JsonReader reader) throws IOException
-    {
+    public static <T> T load(final InputStreamReader inputStreamReader, final Class<T> clazz) {
+        try {
+            if (inputStreamReader != null) {
+                Log.e(TAG, "input stream reader is not null");
+                final Gson gson = new Gson();
+                final BufferedReader reader = new BufferedReader(inputStreamReader);
+                return gson.fromJson(reader, clazz);
+            }
+        } catch (final Exception e) {
+            Log.e(TAG, "load error. " + e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static void handleObject(JsonReader reader) throws IOException {
         reader.beginObject();
         while (reader.hasNext()) {
             JsonToken token = reader.peek();
@@ -87,8 +101,7 @@ public class UtilityFunctions {
      * @param reader
      * @throws IOException
      */
-    public static void handleArray(JsonReader reader) throws IOException
-    {
+    public static void handleArray(JsonReader reader) throws IOException {
         reader.beginArray();
         while (true) {
             JsonToken token = reader.peek();
@@ -111,8 +124,7 @@ public class UtilityFunctions {
      * @param token
      * @throws IOException
      */
-    public static void handleNonArrayToken(JsonReader reader, JsonToken token) throws IOException
-    {
+    public static void handleNonArrayToken(JsonReader reader, JsonToken token) throws IOException {
         if (token.equals(JsonToken.NAME))
             System.out.println(reader.nextName());
         else if (token.equals(JsonToken.STRING))
@@ -125,4 +137,4 @@ public class UtilityFunctions {
 }
 
 
-}
+
