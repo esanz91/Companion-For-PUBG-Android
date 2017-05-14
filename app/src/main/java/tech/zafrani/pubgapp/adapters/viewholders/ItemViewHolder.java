@@ -1,10 +1,8 @@
 package tech.zafrani.pubgapp.adapters.viewholders;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import tech.zafrani.pubgapp.activities.ItemDetailActivity;
 import tech.zafrani.pubgapp.models.Item;
 
 
@@ -23,9 +21,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
-        intent.putExtra(ARG_ITEM, item);
-        view.getContext().startActivity(intent);
+
     }
 
 }
