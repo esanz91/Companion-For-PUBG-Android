@@ -2,6 +2,8 @@ package tech.zafrani.pubgapp.activities;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -79,11 +81,15 @@ public abstract class DrawerActivity extends AppCompatActivity
         this.drawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.drawer_map:
-                this.mapSelected();
+                mapSelected();
                 break;
             case R.id.drawer_items:
-                this.itemsSelected();
+                itemsSelected();
                 break;
+            case R.id.drawer_github:
+                githubSelected();
+                break;
+
         }
         return true;
     }
@@ -113,6 +119,12 @@ public abstract class DrawerActivity extends AppCompatActivity
         } else {
             showFragment(fragment);
         }
+    }
+
+    private void githubSelected(){
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ZafraniTechLLC/PUBG-Companion"));
+        startActivity(browserIntent);
+
     }
 
     private void showFragment(@NonNull final Fragment fragment) {
